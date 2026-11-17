@@ -1,0 +1,286 @@
+* {
+    box-sizing: border-box; /* Vital para que los tamaños y paddings no rompan las cajas */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* ENCABEZADO / NAVBAR */
+.header {
+    background-color: #0066c0;
+    color: white;
+    padding: 15px 30px;
+}
+
+.navbar {
+    width: 100%;
+    display: table;
+}
+
+.brand, .nav-links {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.nav-links {
+    text-align: right;
+}
+
+.titulo-tienda {
+    margin: 0;
+    font-size: 24px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    margin-left: 10px;
+    background: #004b8d;
+    border-radius: 4px;
+}
+
+.nav-links a:hover {
+    background: #003366;
+}
+
+.btn-admin {
+    background-color: #ff9900 !important;
+    color: black !important;
+    font-weight: bold;
+}
+
+/* CONTENEDOR GENERAL (Usamos inline-block vertical-align para evitar que se desborden) */
+.main-container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 30px auto;
+    text-align: center; /* Centra temporalmente para el truco de bloques */
+}
+
+/* COLUMNA IZQUIERDA */
+.col-izquierda {
+    width: 66%;
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+}
+
+.col-izquierda h2 {
+    color: #0066c0;
+    margin-top: 0;
+}
+
+/* GALERÍA DE IMÁGENES */
+.galeria-imagenes {
+    margin-bottom: 20px;
+}
+
+.img-principal {
+    margin-bottom: 10px;
+}
+
+.img-principal img, .mini-img img {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.imagenes-secundarias {
+    width: 100%;
+}
+
+.mini-img {
+    width: 48.5%;
+    display: inline-block;
+}
+
+.mini-img:nth-child(2) {
+    float: right;
+}
+
+.historia {
+    margin-top: 20px;
+}
+
+.historia p {
+    line-height: 1.5;
+    color: #444;
+}
+
+/* COLUMNA DERECHA */
+.col-derecha {
+    width: 31%;
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+    margin-left: 2%; /* Espacio entre columnas */
+}
+
+.col-derecha h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.subtitle-aside {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* FORMULARIO DE BÚSQUEDA */
+.form-buscar {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-buscar input {
+    width: 68%;
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.form-buscar button {
+    width: 29%;
+    padding: 7px;
+    background: #0066c0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+
+.form-buscar button:hover {
+    background: #004b8d;
+}
+
+/* TABLA DE INVENTARIO */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #0066c0;
+    color: white;
+}
+
+.btn-ver-mas {
+    display: block;
+    text-align: center;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.btn-ver-mas:hover {
+    background: #218838;
+}
+
+/* FOOTER */
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}
+/* ESTILOS PARA LOS FORMULARIOS DE PEDIDOS */
+.form-container {
+    width: 60%;
+    max-width: 600px;
+    background: white;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+    color: #0066c0;
+    margin-top: 0;
+}
+
+.subtitle-form {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.campo-form {
+    margin-bottom: 15px;
+}
+
+.campo-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 14px;
+}
+
+.campo-form input, 
+.campo-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-enviar {
+    width: 100%;
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-enviar:hover {
+    background: #218838;
+}
+
+.enlace-volver {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.enlace-volver a {
+    color: #0066c0;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.enlace-volver a:hover {
+    text-decoration: underline;
+}
