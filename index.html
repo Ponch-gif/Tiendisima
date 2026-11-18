@@ -1,0 +1,180 @@
+<?php
+include("conexion.php");
+
+
+session_start();
+if (!isset($_SESSION['contador_interacciones'])) {
+    $_SESSION['contador_interacciones'] = 0;
+}
+
+
+$_SESSION['contador_interacciones']++;
+if ($_SESSION['contador_interacciones'] >= 2) {
+    $_SESSION['contador_interacciones'] = 0;
+    
+    $conexion->query("UPDATE productos SET en_oferta = 0, precio_oferta = NULL WHERE en_oferta = 1");
+
+    
+    $resultado_azar = $conexion->query("SELECT id, precio FROM productos WHERE stock > 0 ORDER BY RAND() LIMIT 1");
+    if ($resultado_azar && $resultado_azar->num_rows > 0) {
+        $prod_azar = $resultado_azar->fetch_assoc();
+        $id_aleatorio = $prod_azar['id'];
+        $precio_original = $prod_azar['precio'];
+        
+       
+        $precio_rebajado = round($precio_original * 0.80, 2);
+
+       
+        $conexion->query("UPDATE productos SET en_oferta = 1, precio_oferta = $precio_rebajado WHERE id = $id_aleatorio");
+    }
+}
+
+
+$busqueda = "";
+if (isset($_GET['buscar'])) {
+    $busqueda = $conexion->real_escape_string($_GET['buscar']);
+    $resultado = $conexion->query("SELECT * FROM productos WHERE nombre LIKE '%$busqueda%' OR categoria LIKE '%$busqueda%'");
+} else {
+    $resultado = $conexion->query("SELECT * FROM productos");
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Abarrotes Don Ponce - Inicio</title>
+    <link rel="stylesheet" href="estilos/styles.css">
+    <style>
+        
+        .badge-oferta {
+            background-color: #e31b23;
+            color: white;
+            padding: 3px 6px;
+            font-size: 11px;
+            border-radius: 3px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 5px;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .precio-tachado {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 11px;
+            margin-right: 5px;
+        }
+        .precio-rebajado {
+            color: #e31b23;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="navbar">
+            <div class="brand">
+                <h1 class="titulo-tienda">Abarrotes Don Ponce</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.php">Inicio</a>
+                <a href="menudeo.php">Pedidos A Domicilio</a>
+                <a href="mayoreo.php">Pedidos Mayoreo</a>
+                <a href="login.php" class="btn-admin">Administrador</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        
+      
+        <div class="col-izquierda">
+            <h2>¡Bienvenidos a Abarrotes Don Ponce!</h2>
+            <p class="intro-bienvenida">Tradición y calidad al servicio de la comunidad desde nuestra fundación. Encuentra todo lo necesario para tu hogar al mejor precio.</p>
+            
+            <div class="galeria-imagenes">
+                <div class="img-principal">
+                    <img src="img/donPonch.png" alt="Don Ponch">
+                </div>
+            </div>
+
+            <div class="historia">
+                <h2>Conoce la Tienda</h2>
+                <p>Fundada en 1985 por Don Ponce y su familia, nuestra tienda comenzó como un pequeño local de barrio comprometido con ofrecer productos frescos y de calidad a precios accesibles.</p>
+                <p>A lo largo de los años, nos hemos expandido a más de 12 sucursales en toda la región, convirtiéndonos en el aliado principal de miles de familias e ingeniosos comerciantes.</p>
+                <p>Ahora damos el salto digital para facilitarte la vida: realiza tus pedidos al mayoreo para tu negocio o solicita tu súper a domicilio sin salir de casa.</p>
+            </div>
+        </div>
+
+        
+        <div class="col-derecha">
+            <h3>📦 Catálogo de Productos y Existencias</h3>
+            <p class="subtitle-aside">Consulta la disponibilidad en tiempo real (¡Atento a las ofertas relámpago!):</p>
+
+            <form method="GET" action="index.php" class="form-buscar">
+                <input type="text" name="buscar" value="<?php echo htmlspecialchars($busqueda); ?>" placeholder="Buscar producto o categoría...">
+                <button type="submit">Buscar</button>
+            </form>
+
+            <?php if(!empty($busqueda)) { ?>
+                <div style="margin-bottom: 15px;">
+                    <a href="index.php" class="btn-ver-todo">Ver Todo</a>
+                </div>
+            <?php } ?>
+
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                </tr>
+                <?php 
+                if ($resultado && $resultado->num_rows > 0) {
+                    while($row = $resultado->fetch_assoc()) { 
+                ?>
+                <tr>
+                    <td class="text-center"><?php echo $row['id']; ?></td>
+                    <td>
+                        <strong><?php echo $row['nombre']; ?></strong>
+                        <?php if ($row['en_oferta'] == 1) { ?>
+                            <span class="badge-oferta">¡OFERTA FLASH!</span>
+                        <?php } ?>
+                    </td>
+                    <td><?php echo $row['categoria']; ?></td>
+                    <td class="text-right">
+                        <?php if ($row['en_oferta'] == 1 && !empty($row['precio_oferta'])) { ?>
+                            <span class="precio-tachado">$<?php echo number_format($row['precio'], 2); ?></span>
+                            <span class="precio-rebajado">$<?php echo number_format($row['precio_oferta'], 2); ?></span>
+                        <?php } else { ?>
+                            $<?php echo number_format($row['precio'], 2); ?>
+                        <?php } ?>
+                    </td>
+                    <td class="text-center"><?php echo $row['stock']; ?> un.</td>
+                </tr>
+                <?php 
+                    }
+                } else {
+                ?>
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No se encontraron productos registrados.</td>
+                </tr>
+                <?php } ?>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>&copy; <?php echo date("Y"); ?> Abarrotes Don Ponce S.A. de C.V. Todos los derechos reservados.</p>
+    </div>
+
+</body>
+</html>
